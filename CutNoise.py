@@ -2,18 +2,18 @@ import os
 from pydub import AudioSegment
 
 # Đường dẫn tới thư mục chứa các file âm thanh
-input_folder = r"E:\Dataset21ad\Audio\Audio\Thân Thiện"
-output_folder = r"E:\Dataset21ad\Audio\Audio\Thân Thiện"
+input_folder = r"C:\Users\Kin Tu\Documents\RecordProcessing\Audio\Thân Thiện\Processed\Câu3_Cut3"
+output_folder = r"C:\Users\Kin Tu\Documents\RecordProcessing\Audio\Thân Thiện\Processed\Câu3_Cut3"
 
 # Tạo thư mục đầu ra nếu chưa có
 os.makedirs(output_folder, exist_ok=True)
 
 # Thời lượng cần cắt (tính bằng milliseconds)
-cut_start_duration = 400  # Cắt đoạn đầu (0.4 giây)
+cut_start_duration = 100  # Cắt đoạn đầu (0.4 giây)
 cut_end_duration =  0 # Cắt đoạn cuối (0.6 giây)
 
 for file_name in os.listdir(input_folder):
-    if file_name.endswith("Thân thiện.wav"):
+    if file_name.endswith("chunk_1.wav"):
         file_path = os.path.join(input_folder, file_name)
         audio = AudioSegment.from_wav(file_path)
         

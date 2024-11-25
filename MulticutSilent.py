@@ -1,6 +1,8 @@
 import os
 from pydub import AudioSegment
 from pydub.silence import split_on_silence
+import librosa
+import soundfile as sf
 
 def split_and_save_audio(input_audio, output_dir, min_silence_len=800, silence_thresh=-58):
     audio = AudioSegment.from_wav(input_audio)
@@ -21,7 +23,32 @@ def split_and_save_audio(input_audio, output_dir, min_silence_len=800, silence_t
         chunk.export(output_path, format="wav")
         print(f"Lưu đoạn âm thanh {i+1} tại: {output_path}")
 
-input_audio_path = r"C:\Users\Kin Tu\Documents\RecordProcessing\Audio\TEST\TEST.wav"
-output_directory = r"C:\Users\Kin Tu\Documents\RecordProcessing\Audio\TEST\Processed"
+def process_audio_files(input_folder, output_folder, sr=16000, top_db=18):
+    os.makedirs(output_folder, exist_ok=True)
+    
+    for filename in os.listdir(input_folder):
+        if filename.endswith(".wav"):
+            input_path = os.path.join(input_folder, filename)
+            output_path = os.path.join(output_folder, filename)
+
+            # Load file âm thanh
+            y, sr = librosa.load(input_path, sr=sr)
+
+            # Cắt bỏ đoạn im lặng
+            y_trimmed, _ = librosa.effects.trim(y, top_db=top_db)
+
+            # Lưu file đã xử lý
+            sf.write(output_path, y_trimmed, sr)
+            print(f"Đã xử lý và lưu: {output_path}")
+
+    print("Hoàn tất xử lý tất cả file.")
+
+
+
+input_audio_path = r"C:\Users\Kin Tu\Documents\RecordProcessing\Audio\Thân Thiện\Thân Thiện_Câu 6_TEST.wav"
+output_directory = r"C:\Users\Kin Tu\Documents\RecordProcessing\Audio\Thân Thiện\Processed\Câu6"
+output_folder = r"C:\Users\Kin Tu\Documents\RecordProcessing\Audio\Thân Thiện\Processed\Câu6_Cut10"
 
 split_and_save_audio(input_audio_path, output_directory)
+process_audio_files(output_directory, output_folder, sr=16000, top_db=18)
+
